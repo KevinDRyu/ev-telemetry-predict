@@ -1,8 +1,8 @@
-pandas==2.2.3
-numpy==1.26.4
-scikit-learn==1.5.2
-joblib==1.4.2
-fastapi==0.115.0
-uvicorn==0.30.6
-streamlit==1.39.0
-matplotlib==3.9.2
+numpy>=2.1
+pandas>=2.2
+scikit-learn>=1.5
+joblib>=1.4
+fastapi>=0.115
+uvicorn>=0.30
+streamlit>=1.39
+matplotlib>=3.9

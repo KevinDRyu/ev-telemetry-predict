@@ -35,10 +35,17 @@ class TelemetryGenerator:
         s.speed = _clamp(s.speed + random.uniform(-2, 3), 0, 160)
         # soc drains with speed + noise
         s.soc = _clamp(s.soc - (0.0007 * s.speed) + random.uniform(-0.02, 0.02), 0, 100)
-        # temps
-        s.batt += 0.01 * s.speed + random.uniform(-0.3, 0.3)
-        s.motor += 0.015 * s.speed + random.uniform(-0.4, 0.4)
-        s.inverter += 0.012 * s.speed + random.uniform(-0.3, 0.3)
+       # temps (stable + realistic)
+        target_batt = s.ambient + 10 + 0.05 * s.speed
+        target_inv  = s.ambient + 15 + 0.07 * s.speed
+
+        # move toward target (cooling/heating dynamics)
+        s.batt = _clamp(s.batt + 0.08 * (target_batt - s.batt) + random.uniform(-0.2, 0.2), -5, 80)
+        s.inverter = _clamp(s.inverter + 0.10 * (target_inv - s.inverter) + random.uniform(-0.3, 0.3), -5, 120)
+
+        # optional: motor current should not accumulate either
+        target_motor = 20 + 1.2 * s.speed
+        s.motor = _clamp(s.motor + 0.12 * (target_motor - s.motor) + random.uniform(-3, 3), 0, 400)
         # wear
         s.tire = _clamp(s.tire - random.uniform(0.00002, 0.00008), 0, 100)
         s.brake = _clamp(s.brake - random.uniform(0.00005, 0.00012), 0, 100)
